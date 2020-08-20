@@ -31,12 +31,39 @@ impl Maze {
     pub fn recursive_backtracker(&mut self) {
         self.tile_visit(0, 0);
     }
+    pub fn has_north(&self, x: usize, y: usize) -> bool {
+        self.get_tile(x, y) & NORTH != 0
+    }
+    pub fn has_south(&self, x: usize, y: usize) -> bool {
+        self.get_tile(x, y) & SOUTH != 0
+    }
+    pub fn has_west(&self, x: usize, y: usize) -> bool {
+        self.get_tile(x, y) & WEST != 0
+    }
+    pub fn has_east(&self, x: usize, y: usize) -> bool {
+        self.get_tile(x, y) & EAST != 0
+    }
+    /// Return the tile at (x;y)
+    /// #Arguments
+    /// * `x` - Tile's abscissa
+    /// * `y` - Tile's ordinate
+    pub fn get_tile(&self, x: usize, y: usize) -> u8 {
+        self.grid[self.width * y + x]
+    }
+    /// Returns the maze's width
+    pub fn get_width(&self) -> usize {
+        self.width
+    }
+    /// Returns the maze's height
+    pub fn get_height(&self) -> usize {
+        self.height
+    }
     /// Check if a tile is not visited
     /// #Arguments
     /// * `x` - Tile's abscissa
     /// * `y` - Tile's ordinate
     fn is_not_visited(&self, x: usize, y: usize) -> bool {
-        self.grid[self.width * y + x] & VISITED == 0
+        self.get_tile(x, y) & VISITED == 0
     }
     /// Break one of the four wall of a tile
     /// #Arguments
@@ -52,7 +79,7 @@ impl Maze {
     /// * `y` - Tile's ordinate
     fn tile_visit(&mut self, x: usize, y: usize) {
         self.grid[self.width * y + x] |= VISITED;
-        println!("{}, {}", x, y);
+        //println!("{}, {}", x, y);
         let choices = [NORTH, SOUTH, WEST, EAST];
         let shuffled = choices.choose_multiple(&mut rand::thread_rng(), 4);
         /*
