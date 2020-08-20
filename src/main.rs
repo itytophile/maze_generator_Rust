@@ -75,15 +75,31 @@ fn maze_draw(
 
 pub fn main() {
     let args: Vec<String> = env::args().collect();
+    let maze_width;
+    let maze_height;
+    let win_width;
+    let win_height;
+    if args.len() != 5 {
+        println!("Wrong number of arguments (Maze Width, Maze Height, Windows Width, Windows Height), using default args");
+        maze_width = 50;
+        maze_height = 50;
+        win_height = 500;
+        win_width = 500;
+    } else {
+        maze_width = args[1].trim().parse().unwrap();
+        maze_height = args[2].trim().parse().unwrap();
+        win_width = args[3].trim().parse().unwrap();
+        win_height = args[4].trim().parse().unwrap();
+    }
+
+
     let mut maze = Maze::new(
-        args[1].trim().parse().unwrap(),
-        args[2].trim().parse().unwrap(),
+        maze_width,
+        maze_height
     );
     maze.recursive_backtracker();
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
-    let win_width = args[3].trim().parse().unwrap();
-    let win_height = args[4].trim().parse().unwrap();
     let window = video_subsystem
         .window("rust-sdl2 demo", win_width, win_height)
         .position_centered()
